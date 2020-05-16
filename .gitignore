@@ -12,3 +12,4 @@ books/*
 
 # ignore phptidy files
 *.phptidy*
+config.ini
