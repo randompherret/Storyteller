@@ -2,6 +2,7 @@
 require_once 'logic/config.php';
 require_once 'logic/functions.php';
 require_once 'logic/slack.php';
+$tempFile = fopen("temp.json","w");
 $headers = getallheaders();
 $request = file_get_contents("php://input");
 $event = json_decode($request, TRUE);
@@ -26,4 +27,9 @@ if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature']))
     die("Not slack");
 }
 
+fwrite($tempFile,"\n");
+fwrite($tempFile,date('D, d M Y H:i:s'));
+fwrite($tempFile,"\n");
+fwrite($tempFile,json_encode($event, JSON_PRETTY_PRINT));
+fclose($tempFile);
 ?>
