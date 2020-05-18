@@ -6,8 +6,6 @@ $headers = getallheaders();
 $request = file_get_contents("php://input");
 $event = json_decode($request, TRUE);
 
-if (isset($event['challenge'])){
-    echo $event['challenge'];
 if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature'])){
     $requestSignature = $headers['X-Slack-Signature'];
     $eventVersion = explode("=", $requestSignature)[0];
@@ -20,6 +18,9 @@ if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature']))
     $eventHash = hash_hmac('sha256', "$eventVersion:$timestamp:$request", $config->slack_secret);
     if(!hash_equals($requestSignature, "$eventVersion=$eventHash")){
         die("No Spoofing");
+    }
+    if (isset($event['challenge'])){
+        echo $event['challenge'];
     }
 } else {
     die("Not slack");
