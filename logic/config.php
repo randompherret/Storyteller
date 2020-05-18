@@ -7,6 +7,7 @@ class Config {
     public $books;
     public $slack_hook;
     public $slack_token;
+    public $slack_secret;
     public $default_book;
     public $character_rolls;
     public $disabled_commands;
@@ -39,6 +40,7 @@ class Config {
         // Load slack section
         $this->slack_hook = $this->get('slack_hook', '', 'slack');
         $this->slack_token = $this->get('slack_token', '', 'slack');
+        $this->slack_secret = $this->get('slack_secret', '', 'slack');
         $this->discord_mode = $this->get('discord_mode', false, 'slack');
 
         // Load general section
