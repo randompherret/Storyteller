@@ -5,6 +5,8 @@ use \src\Platform\PlatformFactory;
 use \src\Connector\SlackConnector;
 
 class slackPlatform extends PlatformFactory {
+    private $channel;
+
     public function __construct(array $headers, string $request, string $secret, string $hook){
         $this->headers = $headers;
         $this->request = $request;
@@ -13,8 +15,7 @@ class slackPlatform extends PlatformFactory {
             die ("not valid");  
         }
         $request = json_decode($request, TRUE);
-        if ($request["event"]["subtype"] != "bot_message")
-        $this->connector->sendMessage($request["event"]["channel"],$this->makeMessage($request["event"]["text"]));
+        $this->channel = $request["event"]["channel"];
         #$this->emoji = new SlackEmoji();
     }
     public function getConnector(): PlatformConnector {
@@ -22,8 +23,8 @@ class slackPlatform extends PlatformFactory {
     }
     #public function getEmoji(): EmojiInterface;
     #public function makePoll(): string;
-    public function makeMessage(string $text): string{
-        return $text;
+    public function sendMessage(string $text): bool{
+        return $this->connector->sendMessage($this->channel,":book: $text");
     }
     #public function makePage(): string;
     #public function getEvent(): BookEvent;
