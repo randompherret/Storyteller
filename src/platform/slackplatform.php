@@ -18,9 +18,6 @@ class slackPlatform extends PlatformFactory {
         $this->channel = $request["event"]["channel"];
         #$this->emoji = new SlackEmoji();
     }
-    public function getConnector(): PlatformConnector {
-        $this->connector;
-    }
     #public function getEmoji(): EmojiInterface;
     #public function makePoll(): string;
     public function sendMessage(string $text): bool{

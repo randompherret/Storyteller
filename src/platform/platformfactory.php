@@ -8,7 +8,6 @@ abstract class PlatformFactory {
     private $headers;
     private $request;
 
-    abstract public function getConnector(): PlatformConnector;
     #abstract public function getEmoji(): EmojiInterface;
     #abstract public function makePoll(): string;
     abstract public function sendMessage(string $text): bool;
