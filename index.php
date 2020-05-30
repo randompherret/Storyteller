@@ -8,7 +8,6 @@ spl_autoload_register();
 $config = new IniConfig("config.ini");
 $headers = getallheaders();
 $request = file_get_contents("php://input");
-$event = json_decode($request, TRUE);
 if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature'])){
     $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
     $commands = $platform->getCommands($request);
@@ -17,9 +16,10 @@ if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature']))
     }
 }
 
-foreach($headers as $name => $line){
-    fwrite($tempFile,"$name = $line\n");
-}
+#foreach($headers as $name => $line){
+    #fwrite($tempFile,"$name = $line\n");
+#}
+$event = json_decode($request, TRUE);
 fwrite($tempFile,"\n");
 fwrite($tempFile,date('D, d M Y H:i:s'));
 fwrite($tempFile,"\n");
