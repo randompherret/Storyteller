@@ -32,7 +32,21 @@ class SlackConnector implements ConnectorInterface{
         return $this->valid;
     }
     #public function getEvent(): EmojiInterface;
-    #public function sendMessage(): boolean;
+    public function sendMessage(string $channel, string $text): bool {
+        $request = array(
+            "channel" => $channel,
+            "text" => $text
+        );
+        $ch = curl_init($this->hook);
+
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return true;
+    }
     #public function getQueue(): array;
     #public function addQueue(): boolean;
 }
