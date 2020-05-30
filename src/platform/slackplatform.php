@@ -11,9 +11,8 @@ class slackPlatform extends PlatformFactory {
         #$request = json_decode($request, TRUE);
         $this->connector = new SlackConnector($headers,$request,$secret);
         if (!$this->connector->Validate()) {
-            die ("not valid")    
+            die ("not valid");  
         }
-        error_log("validation");
         #$this->emoji = new SlackEmoji();
     }
     public function getConnector(): PlatformConnector {
