@@ -24,5 +24,10 @@ class slackPlatform extends PlatformFactory {
         return $this->connector->sendMessage($this->channel,":book: $text");
     }
     #public function makePage(): string;
-    #public function getEvent(): BookEvent;
+    public function getCommands(string $request): array{
+        $request = json_decode($request, TRUE);
+        $fullText = str_replace("<@{$request["authed_users"][0]}>","",$request["event"]["text"]);
+        $commands = explode(";",$fullText);
+        return $commands;
+    }
 }
