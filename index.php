@@ -10,7 +10,7 @@ $headers = getallheaders();
 $request = file_get_contents("php://input");
 $event = json_decode($request, TRUE);
 if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature'])){
-    $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'));
+    $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
 }
 
 foreach($headers as $name => $line){

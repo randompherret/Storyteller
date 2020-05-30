@@ -7,8 +7,9 @@ use \src\Connector\ConnectorInterface;
 class SlackConnector implements ConnectorInterface{
     private $queue;
     private $valid;
+    private $hook;
 
-    public function __construct(array $headers, string $request, string $secret){
+    public function __construct(array $headers, string $request, string $secret, string $hook){
         $requestSignature = $headers['X-Slack-Signature'];
         $requestVersion = explode("=", $requestSignature)[0];
         $timestamp = $headers['X-Slack-Request-Timestamp'];
@@ -24,6 +25,7 @@ class SlackConnector implements ConnectorInterface{
         if (isset($request['challenge'])){
             echo $request['challenge'];
         }
+        $this->hook = $hook;
         $this->valid = true;
     }
     public function Validate(): bool{
