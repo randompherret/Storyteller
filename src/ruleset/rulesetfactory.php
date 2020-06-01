@@ -5,6 +5,7 @@ use \src\Dice\Roller;
 
 abstract class rulesetFactory {
     private $commands;
+    private $roller;
     
     public function __construct() {
         $this->commands = array();
@@ -18,6 +19,15 @@ abstract class rulesetFactory {
             "hint" => "Show this help.",
         );
     }    
+
+    public function checkCommand(string $command): bool {
+        return array_key_exists($command,$this->commands);
+    }
+
+    public function getCommand($command): string {
+        return $this->commands[$command]["command"];
+    }
+
     public function rollDice(string $dice): string {
         return "rolled {$this->roller->roll($dice)}";
     }

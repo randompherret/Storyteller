@@ -12,11 +12,26 @@ $request = file_get_contents("php://input");
 if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature'])){
     $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
 }
-
 $ruleSet = new basicRules();
 $commands = $platform->getCommands($request);
-foreach ($commands as $command){
-    $platform->sendMessage("got $command");
+$responses = array();
+foreach ($commands as $toDo){
+    $toDo = ltrim($toDo);
+    if (strlen($toDo) == 0){
+        break;
+    }
+    $command = explode(" ", $toDo,2);
+    $command = array_pad($command, 2, null);
+    $command[0] = strtolower($command[0]);
+    if(!$ruleSet->checkCommand($command[0])){
+        $platform->sendMessage("Sorry, I didn't understand $toDo");
+        break;    
+    }
+    $function = $ruleSet->getCommand($command[0]);
+    $responses[] = $ruleSet->$function($command[1]);
+}
+foreach ($responses as $response) {
+    $platform->sendMessage($response);
 }
 
 #foreach($headers as $name => $line){
