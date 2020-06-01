@@ -4,7 +4,7 @@ namespace src\Platform;
 use \src\Platform\PlatformFactory;
 use \src\Connector\SlackConnector;
 
-class slackPlatform extends PlatformFactory {
+class slackPlatform extends platformFactory {
     private $channel;
 
     public function __construct(array $headers, string $request, string $secret, string $hook){

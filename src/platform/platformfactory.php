@@ -2,7 +2,7 @@
 
 namespace src\Platform;
 
-abstract class PlatformFactory {
+abstract class platformFactory {
     protected $connector;
     protected $emoji;
     private $headers;
