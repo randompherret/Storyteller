@@ -2,7 +2,7 @@
 use \src\Config\IniConfig;
 use \src\Platform\SlackPlatform;
 
-$tempFile = fopen("temp.json","w");
+#$tempFile = fopen("temp.json","w");
 spl_autoload_register();
 
 $config = new IniConfig("config.ini");
@@ -20,9 +20,9 @@ foreach ($commands as $command){
 #foreach($headers as $name => $line){
     #fwrite($tempFile,"$name = $line\n");
 #}
-$event = json_decode($request, TRUE);
-fwrite($tempFile,"\n");
-fwrite($tempFile,date('D, d M Y H:i:s'));
-fwrite($tempFile,"\n");
-fwrite($tempFile,json_encode($event, JSON_PRETTY_PRINT));
-fclose($tempFile);
+#$event = json_decode($request, TRUE);
+#fwrite($tempFile,"\n");
+#fwrite($tempFile,date('D, d M Y H:i:s'));
+#fwrite($tempFile,"\n");
+#fwrite($tempFile,json_encode($event, JSON_PRETTY_PRINT));
+#fclose($tempFile);
