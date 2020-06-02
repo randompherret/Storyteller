@@ -17,13 +17,13 @@ class slackPlatform extends platformFactory {
         $request = json_decode($request, TRUE);
         $this->channel = $request["event"]["channel"];
     }
-    public function sendMessage(string $text): bool{
-        return $this->connector->sendMessage($this->channel,":book: $text");
-    }
     public function getCommands(string $request): array{
         $request = json_decode($request, TRUE);
         $fullText = str_replace("<@{$request["authed_users"][0]}>","",$request["event"]["text"]);
         $commands = explode(";",$fullText);
         return $commands;
+    }
+    public function sendMessage(string $text): bool{
+        return $this->connector->sendMessage($this->channel,":book: $text");
     }
 }

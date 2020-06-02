@@ -8,6 +8,6 @@ abstract class platformFactory {
     private $headers;
     private $request;
 
-    abstract public function sendMessage(string $text): bool;
     abstract public function getCommands(string $request): array;
+    abstract public function sendMessage(string $text): bool;
 }
