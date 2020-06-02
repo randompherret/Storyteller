@@ -8,8 +8,6 @@ class slackPlatform extends platformFactory {
     private $channel;
 
     public function __construct(array $headers, string $request, string $secret, string $hook){
-        $this->headers = $headers;
-        $this->request = $request;
         $this->connector = new SlackConnector($headers,$request,$secret,$hook);
         if (!$this->connector->Validate()) {
             die ("not valid");  
