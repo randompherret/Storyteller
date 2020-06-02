@@ -14,7 +14,6 @@ if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature']))
 }
 $ruleSet = new basicRules();
 $commands = $platform->getCommands($request);
-$responses = array();
 foreach ($commands as $toDo){
     $toDo = ltrim($toDo);
     if (strlen($toDo) == 0){
@@ -24,15 +23,13 @@ foreach ($commands as $toDo){
     $command = array_pad($command, 2, null);
     $command[0] = strtolower($command[0]);
     if(!$ruleSet->checkCommand($command[0])){
-        $platform->sendMessage("Sorry, I didn't understand $toDo");
+        $platform->queueMessage("Sorry, I didn't understand $toDo");
         break;    
     }
     $function = $ruleSet->getCommand($command[0]);
-    $responses[] = $ruleSet->$function($command[1]);
+    $platform->queueMessage($ruleSet->$function($command[1]));
 }
-foreach ($responses as $response) {
-    $platform->sendMessage($response);
-}
+$platform->sendMessages();
 
 #foreach($headers as $name => $line){
     #fwrite($tempFile,"$name = $line\n");

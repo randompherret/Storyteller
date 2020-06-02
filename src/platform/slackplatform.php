@@ -21,7 +21,15 @@ class slackPlatform extends platformFactory {
         $commands = explode(";",$fullText);
         return $commands;
     }
-    public function sendMessage(string $text): bool{
-        return $this->connector->sendMessage($this->channel,":book: $text");
+    public function queueMessage(string $text): bool {
+        return $this->messages[] = $text;
+
+    }
+    public function sendMessages(): bool{
+        $message = ":book:";
+        foreach ($this->messages as $line) {
+            $message .= "$line\n";
+        }
+        return $this->connector->sendMessage($this->channel,$message);
     }
 }
