@@ -16,14 +16,10 @@ class slackPlatform extends platformFactory {
         }
         $request = json_decode($request, TRUE);
         $this->channel = $request["event"]["channel"];
-        #$this->emoji = new SlackEmoji();
     }
-    #public function getEmoji(): EmojiInterface;
-    #public function makePoll(): string;
     public function sendMessage(string $text): bool{
         return $this->connector->sendMessage($this->channel,":book: $text");
     }
-    #public function makePage(): string;
     public function getCommands(string $request): array{
         $request = json_decode($request, TRUE);
         $fullText = str_replace("<@{$request["authed_users"][0]}>","",$request["event"]["text"]);

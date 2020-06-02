@@ -31,7 +31,6 @@ class SlackConnector implements ConnectorInterface{
     public function Validate(): bool{
         return $this->valid;
     }
-    #public function getEvent(): EmojiInterface;
     public function sendMessage(string $channel, string $text): bool {
         $request = array(
             "channel" => $channel,
@@ -47,6 +46,4 @@ class SlackConnector implements ConnectorInterface{
         curl_close($ch);
         return true;
     }
-    #public function getQueue(): array;
-    #public function addQueue(): boolean;
 }
