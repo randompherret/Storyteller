@@ -21,6 +21,9 @@ class slackPlatform extends platformFactory {
         $commands = explode(";",$fullText);
         return $commands;
     }
+    public function getId(): string {
+        return $this->channel;
+    }
     public function queueMessage(string $text): bool {
         return $this->messages[] = $text;
 
