@@ -27,9 +27,7 @@ class slackPlatform extends platformFactory {
     }
     public function sendMessages(): bool{
         $message = ":book:";
-        foreach ($this->messages as $line) {
-            $message .= "$line\n";
-        }
+        $message .= implode("\n",$this->messages);
         return $this->connector->sendMessage($this->channel,$message);
     }
 }
