@@ -5,8 +5,6 @@ namespace src\Config;
 use \src\Config\ConfigInterface;
 
 class IniConfig implements ConfigInterface{
-    private $slackSecret;
-    private $slackHook;
     private $config;
 
     public function __construct($file) {
