@@ -1,5 +1,6 @@
 <?php
 use \src\Config\IniConfig;
+use \src\Config\JsonConfig;
 use \src\Platform\SlackPlatform;
 use \src\RuleSet\basicRules;
 
@@ -12,6 +13,8 @@ $request = file_get_contents("php://input");
 if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature'])){
     $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
 }
+$jsonConfig = new JsonConfig($platform->getId());
+$platform->queueMessage($jsonConfig->getSetting("room","id"));
 $ruleSet = new basicRules();
 $commands = $platform->getCommands($request);
 foreach ($commands as $toDo){
