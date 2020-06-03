@@ -18,7 +18,4 @@ class IniConfig implements ConfigInterface{
     public function getSetting(string $section,string $setting): string{
         return $this->config[$section][$setting];
     }
-    #public function sendMessage(): bool;
-    #public function getQueue(): array;
-    #public function addQueue(): bool;
 }
