@@ -19,6 +19,7 @@ $ruleSet = "src\\RuleSet\\{$jsonConfig->getSetting('book','ruleSet')}Rules";
 $ruleSet = new $ruleSet();
 $director = new Director();
 $director->getCommands($ruleSet);
+$director->getCommands($jsonConfig);
 $commands = $platform->getCommands($request);
 foreach ($commands as $toDo){
     $toDo = ltrim($toDo);
