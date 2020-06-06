@@ -24,13 +24,19 @@ abstract class rulesetFactory {
         return array_key_exists($command,$this->commands);
     }
 
-    public function getCommand($command): string {
-        return $this->commands[$command]["command"];
+    public function getCommands(): array {
+        return $this->commands;
     }
 
     public function rollDice(string $dice): string {
         return "rolled {$this->roller->roll($dice)}";
     }
+    
+    public function runCommand($observer, $event, $data): void {
+        $method = $this->commands[$event]["command"];
+        $observer->messages[] = $this->$method($data);
+    }
+
     public function getHelp(): string {
         $message = "Here are the commands you can run:\n";
         ksort($this->commands);

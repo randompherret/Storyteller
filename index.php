@@ -2,7 +2,8 @@
 use \src\Config\IniConfig;
 use \src\Config\JsonConfig;
 use \src\Platform\SlackPlatform;
-use \src\RuleSet\basicRules;
+use \src\Command\Director;
+
 
 #$tempFile = fopen("temp.json","w");
 spl_autoload_register();
@@ -14,8 +15,10 @@ if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature']))
     $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
 }
 $jsonConfig = new JsonConfig($platform->getId());
-$platform->queueMessage($jsonConfig->getSetting("room","id"));
-$ruleSet = new basicRules();
+$ruleSet = "src\\RuleSet\\{$jsonConfig->getSetting('book','ruleSet')}Rules";
+$ruleSet = new $ruleSet();
+$director = new Director();
+$director->getCommands($ruleSet);
 $commands = $platform->getCommands($request);
 foreach ($commands as $toDo){
     $toDo = ltrim($toDo);
@@ -25,16 +28,10 @@ foreach ($commands as $toDo){
     $command = explode(" ", $toDo,2);
     $command = array_pad($command, 2, null);
     $command[0] = strtolower($command[0]);
-    if(!$ruleSet->checkCommand($command[0])){
-        $platform->queueMessage("Sorry, I didn't understand $toDo");
-        break;    
-    }
-    $function = $ruleSet->getCommand($command[0]);
-    $platform->queueMessage($ruleSet->$function($command[1]));
+    $director->notify($command[0],$command[1]);
 }
-$platform->sendMessages();
-
 #foreach($headers as $name => $line){
+$platform->sendMessages($director->messages);
     #fwrite($tempFile,"$name = $line\n");
 #}
 #$event = json_decode($request, TRUE);

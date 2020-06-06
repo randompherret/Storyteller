@@ -14,23 +14,27 @@ class slackPlatform extends platformFactory {
         }
         $request = json_decode($request, TRUE);
         $this->channel = $request["event"]["channel"];
+        $this->messages = array();
     }
+    
     public function getCommands(string $request): array{
         $request = json_decode($request, TRUE);
         $fullText = str_replace("<@{$request["authed_users"][0]}>","",$request["event"]["text"]);
         $commands = explode(";",$fullText);
         return $commands;
     }
+
     public function getId(): string {
         return $this->channel;
     }
-    public function queueMessage(string $text): bool {
-        return $this->messages[] = $text;
 
-    }
-    public function sendMessages(): bool{
-        $message = ":book:";
-        $message .= implode("\n",$this->messages);
-        return $this->connector->sendMessage($this->channel,$message);
+    public function sendMessages(array $messages): bool{
+        $message = ":book: ";
+        if (count($messages)) {
+            $message .= implode("\n",$messages);
+            return $this->connector->sendMessage($this->channel,$message);
+        } else {
+            return true;
+        }
     }
 }
