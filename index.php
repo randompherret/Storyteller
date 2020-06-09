@@ -14,15 +14,15 @@ $request = file_get_contents("php://input");
 if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature'])){
     $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
 }
+$director = new Director();
 $jsonConfig = new JsonConfig($platform->getId());
+$director->getCommands($jsonConfig);
 $book = "books\\{$jsonConfig->getSetting('book','name')}";
 $book = new $book();
+$director->getCommands($book);
 $ruleSet = "src\\RuleSet\\{$book->getRuleset()}Rules";
 $ruleSet = new $ruleSet();
-$director = new Director();
-$director->getCommands($book);
 $director->getCommands($ruleSet);
-$director->getCommands($jsonConfig);
 $commands = $platform->getCommands($request);
 foreach ($commands as $toDo){
     $toDo = ltrim($toDo);
