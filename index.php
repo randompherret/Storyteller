@@ -15,9 +15,12 @@ if (isset($headers['X-Slack-Request-Timestamp'], $headers['X-Slack-Signature']))
     $platform = new SlackPlatform($headers,$request,$config->getSetting('slack','slack_secret'),$config->getSetting('slack','slack_hook'));
 }
 $jsonConfig = new JsonConfig($platform->getId());
-$ruleSet = "src\\RuleSet\\{$jsonConfig->getSetting('book','ruleSet')}Rules";
+$book = "books\\{$jsonConfig->getSetting('book','name')}";
+$book = new $book();
+$ruleSet = "src\\RuleSet\\{$book->getRuleset()}Rules";
 $ruleSet = new $ruleSet();
 $director = new Director();
+$director->getCommands($book);
 $director->getCommands($ruleSet);
 $director->getCommands($jsonConfig);
 $commands = $platform->getCommands($request);

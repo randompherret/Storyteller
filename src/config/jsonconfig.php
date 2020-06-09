@@ -19,7 +19,6 @@ class JsonConfig extends Observer implements ConfigInterface{
                 ),
                 "book"=> array(
                     "name" => "jofm",
-                    "ruleSet" => "basic",
                 ),
                 "character" => array(
                 ),
