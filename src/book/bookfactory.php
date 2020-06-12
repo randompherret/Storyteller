@@ -15,8 +15,8 @@ abstract class BookFactory extends observer {
         );
     }
     
-    public function getPage(string $pageNumber): string {
-        return $this->pages[$pageNumber];
+    public function getPage(string $pageNumber): void {
+        $this->director->messages[] = $this->pages[$pageNumber];
     }
     
     public function getRuleset(): string {

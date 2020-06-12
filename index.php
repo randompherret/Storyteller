@@ -5,7 +5,6 @@ use \src\Platform\SlackPlatform;
 use \src\Command\Director;
 
 
-#$tempFile = fopen("temp.json","w");
 spl_autoload_register();
 
 $config = new IniConfig("config.ini");
@@ -23,6 +22,15 @@ $director->getCommands($book);
 $ruleSet = "src\\RuleSet\\{$book->getRuleset()}Rules";
 $ruleSet = new $ruleSet();
 $director->getCommands($ruleSet);
+if ($ruleSet->hasCharacter()){
+    $character =  $ruleSet->getCharacter();
+    $director->getCommands($character);
+}
+if ($ruleSet->hasInventory()){
+    $ruleSet->setInventory($jsonConfig->getInventory());
+    $inventory = $ruleSet->getInventory();
+    $director->getCommands($inventory);
+}
 $commands = $platform->getCommands($request);
 foreach ($commands as $toDo){
     $toDo = ltrim($toDo);
@@ -34,11 +42,14 @@ foreach ($commands as $toDo){
     $command[0] = strtolower($command[0]);
     $director->notify($command[0],$command[1]);
 }
-#foreach($headers as $name => $line){
+$jsonConfig->outputFile();
 $platform->sendMessages($director->messages);
+#$tempFile = fopen("temp.json","w");
+#foreach($director->observers['help'] as $name => $line){
     #fwrite($tempFile,"$name = $line\n");
 #}
 #$event = json_decode($request, TRUE);
+
 #fwrite($tempFile,"\n");
 #fwrite($tempFile,date('D, d M Y H:i:s'));
 #fwrite($tempFile,"\n");

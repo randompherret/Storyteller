@@ -3,7 +3,8 @@
 namespace src\Command;
 
 abstract class observer {
-    protected $commands;   
+    protected $commands;  
+    protected $director;
 
     public function __construct() {
         $this->commands = array();
@@ -21,14 +22,15 @@ abstract class observer {
         return $this->commands;
     }
     
-    public function runCommand($observer, $event, $data): void {
+    public function runCommand($director, $event, $data): void {
         $method = $this->commands[$event]["command"];
-        $observer->messages[] = $this->$method($data);
+        $this->director = $director;
+        $this->$method($data);
     }
 
-    public function getHelp(): string {
+    public function getHelp(): void {
         ksort($this->commands);
         $message = implode("\n",array_column($this->commands, 'hint'));
-        return $message;
+        $this->director->messages[] = $message;
     }
 }

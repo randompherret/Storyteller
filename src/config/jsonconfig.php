@@ -12,7 +12,7 @@ class JsonConfig extends Observer implements ConfigInterface{
     public function __construct($file) {
         parent::__construct();
         $this->filename = "saves" . DIRECTORY_SEPARATOR . $file . ".json";
-        if (!file_exists($file)) {
+        if (!file_exists($this->filename)) {
             $template = array(
                 "room" => array(
                     "id" => $file,
@@ -21,16 +21,36 @@ class JsonConfig extends Observer implements ConfigInterface{
                     "name" => "jofm",
                 ),
                 "character" => array(
+                
+                ),
+                "inventory" => array(
+
                 ),
             );
             $jsonData = json_encode($template, JSON_PRETTY_PRINT);
             file_put_contents($this->filename, $jsonData);
         }
+        $this->config = json_decode(file_get_contents($this->filename), true);
         $this->commands["set"] = array(
             "command" => "setCommand",
             "hint" => "set - Change various options",
         );
-        $this->config = json_decode(file_get_contents($this->filename), true);
+        $this->commands["save"] = array(
+            "command" => "outputFile",
+            "hint" => "",
+        );
+        $this->commands["saveInventory"] = array(
+            "command" => "saveInventory",
+            "hint" => "",
+        );
+    }
+
+    public function getInventory(): array{
+        if (isset($this->config["inventory"])){
+            return $this->config["inventory"];
+        } else {
+            return array();
+        }
     }
 
     public function getSetting(string $section,string $setting): string{
@@ -40,21 +60,31 @@ class JsonConfig extends Observer implements ConfigInterface{
             return "";
         }
     }
-    public function setCommand(string $command): string {
+
+    public function outputFile(): bool {
+        $jsonData = json_encode($this->config, JSON_PRETTY_PRINT);
+        return file_put_contents($this->filename, $jsonData);
+    }
+
+    public function saveInventory($inventory): void {
+        $this->config["inventory"] = $inventory;
+    }
+
+    public function setCommand(string $command): void {
         $command = explode(" ",$command);
         if (count($command) == 3) {
             if($this->setSetting($command[0],$command[1],$command[2])) {
-                return "Saved";
+                $this->director->messages[] =  "Saved";
             }else {
-                return "Unable to save";
+                $this->director->messages[] =  "Unable to save";
             }
         } else {
-            return "Incorrect info for saving";
+            $this->director->messages[] =  "Incorrect info for saving";
         }
     }
+
     public function setSetting(string $section,string $setting, string $value): bool{
         $this->config[$section][$setting] = $value;
-        $jsonData = json_encode($this->config, JSON_PRETTY_PRINT);
-        return file_put_contents($this->filename, $jsonData);
+        $this->outputFile();
     }
 }

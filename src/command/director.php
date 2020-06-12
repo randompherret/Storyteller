@@ -22,7 +22,8 @@ class Director implements \SplSubject {
     }
 
     public function getCommands($class): void {
-        foreach($class->getCommands() as $name => $command) {
+        $commands = $class->getCommands();
+        foreach($commands as $name => $command) {
             $this->attach($class,$name);
         }
     }
