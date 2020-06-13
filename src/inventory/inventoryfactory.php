@@ -52,17 +52,25 @@ abstract class InventoryFactory extends Observer {
     public function putDownItem(string $things): void {
         $things = explode(" ",$things);
         $things = array_pad($things, 2, 1);
-        $this->removeItem($things[0],$things[1]);
-        $this->director->messages[] = "After counting {$things[0]} there are {$this->countItem($things[0])}";
+        if ($this->removeItem($things[0],$things[1])) {
+            $this->director->messages[] = "After counting {$things[0]} there are {$this->countItem($things[0])}";
+        } else {
+            $this->director->messages[] = "unable to put down {$things[0]}";
+        }
     }
 
-    public function removeItem (string $item, int $count = 1): void{
+    public function removeItem (string $item, int $count = 1): int {
         if (isset($this->contents[$item])) {
-            $this->contents[$item]['count'] -= $count;
-            if ($this->contents[$item]['count'] <= 0){
+            if ($this->contents[$item]['count'] > $count){
+                $this->contents[$item]['count'] -= $count;
+            } elseif ($this->contents[$item]['count'] == $count){
                 unset($this->contents[$item]);
+            } else {
+                return false; 
             }
+            $this->director->notify("saveInventory",$this->contents);
+            return true;
         }
-        $this->director->notify("saveInventory",$this->contents);
+        return false; 
     }
 }
