@@ -16,6 +16,10 @@ abstract class InventoryFactory extends Observer {
             "command" => "putDownItem",
             "hint" => "putdown - Putdown an item, optionally include a count. Example: putdown gold 5",
         );
+        $this->commands["checkbag"] = array(
+            "command" => "checkBag",
+            "hint" => "checkback - Check your inventory and get a listing",
+        );
     }
 
     public function addItem (string $item, int $count = 1): void{
@@ -28,6 +32,14 @@ abstract class InventoryFactory extends Observer {
             );
         }
         $this->director->notify("saveInventory",$this->contents);
+    }
+
+    public function checkBag(): void {
+        ksort($this->contents);
+        $this->director->messages[] = "You check your bag and find: ";
+        foreach ($this->contents as $item){
+            $this->director->messages[] = "{$item["name"]}: {$item["count"]}";
+        }
     }
 
     public function countItem (string $item): int{
