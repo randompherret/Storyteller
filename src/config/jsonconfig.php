@@ -85,6 +85,6 @@ class JsonConfig extends Observer implements ConfigInterface{
 
     public function setSetting(string $section,string $setting, string $value): bool{
         $this->config[$section][$setting] = $value;
-        $this->outputFile();
+        return $this->outputFile();
     }
 }
