@@ -18,7 +18,7 @@ abstract class InventoryFactory extends Observer {
         );
         $this->commands["checkbag"] = array(
             "command" => "checkBag",
-            "hint" => "checkback - Check your inventory and get a listing",
+            "hint" => "checkbag - Check your inventory and get a listing",
         );
     }
 
