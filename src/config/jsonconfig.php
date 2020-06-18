@@ -43,6 +43,10 @@ class JsonConfig extends Observer implements ConfigInterface{
             "command" => "saveInventory",
             "hint" => "",
         );
+        $this->commands["setSetting"] = array(
+            "command" => "setSetting",
+            "hint" => "",
+        );
     }
 
     public function getInventory(): array{
@@ -73,7 +77,12 @@ class JsonConfig extends Observer implements ConfigInterface{
     public function setCommand(string $command): void {
         $command = explode(" ",$command);
         if (count($command) == 3) {
-            if($this->setSetting($command[0],$command[1],$command[2])) {
+            $setting = array(
+                "section" => $command[0],
+                "setting" => $command[1],
+                "value" => $command[2],
+            );
+            if($this->setSetting($setting)) {
                 $this->director->messages[] =  "Saved";
             }else {
                 $this->director->messages[] =  "Unable to save";
@@ -83,8 +92,8 @@ class JsonConfig extends Observer implements ConfigInterface{
         }
     }
 
-    public function setSetting(string $section,string $setting, string $value): bool{
-        $this->config[$section][$setting] = $value;
+    public function setSetting(array $setting): bool{
+        $this->config[$setting["section"]][$setting["setting"]] = $setting["value"];
         return $this->outputFile();
     }
 }
