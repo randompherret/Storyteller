@@ -16,7 +16,12 @@ abstract class BookFactory extends observer {
     }
     
     public function getPage(string $pageNumber): void {
-        $this->director->messages[] = $this->pages[$pageNumber];
+        if (isset($this->pages[$pageNumber])){
+            $this->director->messages[] = $this->pages[$pageNumber];
+            $this->director->notify("set", "book page $pageNumber");
+        } else {
+            $this->director->messages[] = "Could not find page $pageNumber";
+        }
     }
     
     public function getRuleset(): string {
